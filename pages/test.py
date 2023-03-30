@@ -7,7 +7,8 @@ co_important = db_pub['important']
 co_interesting = db_pub['interesting']
 co_read = db_pub['read']
 co_unread = db_pub['unread']
-interesting_pubs = co_interesting.find({}).sort([("_id", -1)])
+important_pubs = co_important.find({}).sort([("_id", -1)])
+global note_text
 
 st.set_page_config(
     page_title="Ych's Reader", 
@@ -33,29 +34,28 @@ def show_st(pub):
     except:
         st.header('All recent publications have been read')
 
-def move_to_important(current_pub):
-    co_important.insert_one(current_pub)
-    co_interesting.delete_one(current_pub)
+def move_to_interesting(current_pub):
+    co_interesting.insert_one(current_pub)
+    co_important.delete_one(current_pub)
 
 def move_to_read(current_pub):
     co_read.insert_one(current_pub)
-    co_interesting.delete_one(current_pub)
+    co_important.delete_one(current_pub)
 
 def move_to_unread(current_pub):
     co_unread.insert_one(current_pub)
-    co_interesting.delete_one(current_pub)
+    co_important.delete_one(current_pub)
 
 def main():
-    st.title('Life is short, Reading is long')
+    global note_text
+    # st.title('Life is short, Reading is long')
+    note_text = st.text_input('notes', '')
+    st.text(note_text)
+    st.text('hello')
     with st.sidebar:
         st.image('icon-trans.png', width = 150)
         st.markdown('**WangYC @ RUC**')
         st.markdown('**All rights reserved ©️2023**')
+    
 
-    for each in interesting_pubs:
-        show_st(each)
-        st.button('move to important', key = each['_id'] + '.1', on_click = move_to_important, kwargs = dict(current_pub = each))
-        st.button('move to read', key = each['_id'] + '.2', on_click = move_to_read, kwargs = dict(current_pub = each))
-        st.button('move to unread', key = each['_id'] + '.3', on_click = move_to_unread, kwargs = dict(current_pub = each))
-        
 main()

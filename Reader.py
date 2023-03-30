@@ -13,6 +13,7 @@
 import streamlit as st
 import pymongo as mg
 from model import *
+import time
 
 mg_client = mg.MongoClient("mongodb://localhost:27017/")
 db_pub = mg_client['publications']
@@ -25,9 +26,10 @@ st.set_page_config(
     page_title="Ych's Reader", 
     page_icon="icon-trans.png"
 )
+
 def update_pub():
     try:
-        current_pub = co_unread.find_one()
+        current_pub = co_unread.find_one(sort=[('_id', -1)])
         return current_pub
     except:
         return
@@ -39,6 +41,7 @@ def show_st():
         st.header(pub['title'])
         # st.markdown(f"**Title:** {pub['title']}")
         st.markdown(f"**Date:** {pub['date']}")
+        st.markdown(f"**Area:** {pub['Area']}")
         st.markdown(f"**Authors:** {', '.join(pub['authors'])}")
         st.markdown(f"**Page Link:** {pub['page']}")
         st.markdown(f"**PDF Link:** https://arxiv.org/pdf/{pub['page'].replace('https://arxiv.org/abs/', '')}.pdf")
@@ -96,28 +99,38 @@ def translate_abs():
     except:
         print('translation failed')
 
-
-
 def main():
     global current_pub
     current_pub = update_pub()
     # st.title('Life is short, Reading is long')
     show_st()
-    st.button('Translate Abs', on_click = translate_abs)
+    try:
+        if current_pub['abs_trans'] == '':
+            st.button('Translate Abs', on_click = translate_abs, use_container_width = True)
+    except:
+        pass
     # st.button('start!', on_click = show_st)
     # st.header('Classification')
+    # st.header(' ')
     st.header(' ')
     st.subheader('Classification')
     col1, col2, col3 = st.columns(spec = 3, gap = 'small')
     with col1:
-        st.button('interesting', on_click = f_interesting)
+        st.button('important', on_click = f_important, use_container_width = True)
     with col2:
-        st.button('important', on_click = f_important)
+        st.button('interesting', on_click = f_interesting, use_container_width = True)
     with col3:
-        st.button('pass', on_click = f_read)
+        st.button('pass', on_click = f_read, use_container_width = True)
     # st.header('Function')
     # st.subheader(' ')
     st.text(f"{co_unread.count_documents({})} pubs left in unread section")
+
+    # with st.empty():
+    #     second_count = 0
+    #     while(True):
+    #         st.write(f"{second_count} seconds past ...")
+    #         time.sleep(1)
+    #         second_count += 1
 
     with st.sidebar:
         # st.header('Classification')

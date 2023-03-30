@@ -12,8 +12,12 @@ st.set_page_config(
     page_icon="icon-trans.png"
 )
 
+global area
+global retrive_num
 
-def update_pubs(area, retrive_num):
+def update_pubs():
+    global area
+    global retrive_num
 
     response = requests.get(url='https://arxiv.org/list/cs.{}/pastweek?skip=0&show={}'.format(area, retrive_num))
     result = response.text
@@ -48,6 +52,7 @@ def update_pubs(area, retrive_num):
                 '_id' : id,
                 'date' : date,
                 'title' : title,
+                'Area' : area,
                 'authors' : author_list,
                 'abstract' : abstract,
                 'page' : 'https://arxiv.org' + url,
@@ -89,4 +94,4 @@ st.title('Life is short, Reading is long')
 area = st.text_input('Pub Area', 'CL')
 retrive_num = st.text_input('Retriving Num', '50')
 
-st.button('Update', key = '1', on_click = update_pubs, kwargs = dict(area = area, retrive_num = int(retrive_num)))
+st.button('Update', key = '1', on_click = update_pubs)

@@ -7,7 +7,7 @@ co_important = db_pub['important']
 co_interesting = db_pub['interesting']
 co_read = db_pub['read']
 co_unread = db_pub['unread']
-read_pubs = co_read.find()
+read_pubs = co_read.find({}).sort([("_id", -1)])
 
 st.set_page_config(
     page_title="Ych's Reader", 
@@ -19,6 +19,7 @@ def show_st(pub):
         st.header(pub['title'])
         # st.markdown(f"**Title:** {pub['title']}")
         st.markdown(f"**Date:** {pub['date']}")
+        st.markdown(f"**Area:** {pub['Area']}")
         st.markdown(f"**Authors:** {', '.join(pub['authors'])}")
         st.markdown(f"**Page Link:** {pub['page']}")
         st.markdown(f"**PDF Link:** https://arxiv.org/pdf/{pub['page'].replace('https://arxiv.org/abs/', '')}.pdf")

@@ -39,6 +39,7 @@ def update_pubs(area, retrive_num):
         pub_content_list.append({
             '_id' : id,
             'date' : date,
+            'area' : area,
             'title' : title,
             'authors' : author_list,
             'abstract' : abstract,
