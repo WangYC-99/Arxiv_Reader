@@ -9,7 +9,7 @@ import streamlit as st
 
 st.set_page_config(
     page_title="Ych's Reader", 
-    page_icon="icon-trans.png"
+    page_icon="../icon-trans.png"
 )
 
 global area
