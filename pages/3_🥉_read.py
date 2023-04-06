@@ -11,7 +11,7 @@ read_pubs = co_read.find({}).sort([("_id", -1)])
 
 st.set_page_config(
     page_title="Ych's Reader", 
-    page_icon="../icon-trans.png"
+    page_icon="icon-trans.png"
 )
 
 def show_st(pub):
